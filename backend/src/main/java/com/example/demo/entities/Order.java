@@ -42,4 +42,9 @@ public class Order {
 
     @Column(name = "shipping_method")
     private String shippingMethod;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)  // Assurez-vous d'avoir une relation avec l'utilisateur
+    private User user;
 }
+
