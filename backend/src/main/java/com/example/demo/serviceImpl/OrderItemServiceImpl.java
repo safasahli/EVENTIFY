@@ -1,4 +1,4 @@
-package com.example.demo.services.impl;
+package com.example.demo.serviceImpl;
 
 import com.example.demo.entities.OrderItem;
 import com.example.demo.repositories.OrderItemRepository;
@@ -22,21 +22,24 @@ public class OrderItemServiceImpl implements OrderItemService {
     @Override
     public Optional<OrderItem> getOrderItemById(Long id) {
         return orderItemRepository.findById(id);
-    public OrderItem getOrderItemById(Long id) {
-        Optional<OrderItem> optionalOrderItem = orderItemRepository.findById(id);
-        if (optionalOrderItem.isPresent()) {
-            return optionalOrderItem.get();
-        } else {
-            throw new RuntimeException("Order item not found with id: " + id);
-        }
     }
 
     @Override
+    public OrderItem saveOrderItem(OrderItem orderItem) {
+        return orderItemRepository.save(orderItem);
+    }
+
+    @Override
+    public void deleteOrderItem(Long id) {
+    orderItemRepository.deleteById(id);
+    }
+
+    /*@Override
     public void deleteOrderItemById(Long id) {
         if (orderItemRepository.existsById(id)) {
             orderItemRepository.deleteById(id);
         } else {
             throw new RuntimeException("Order item not found with id: " + id);
         }
-    }
+    }*/
 }
