@@ -3,26 +3,16 @@ package com.example.demo.services.impl;
 import com.example.demo.entities.OrderItem;
 import com.example.demo.repositories.OrderItemRepository;
 import com.example.demo.services.OrderItemService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class OrderItemServiceImpl implements OrderItemService {
-
     private final OrderItemRepository orderItemRepository;
-
-    // Constructor for dependency injection
-    public OrderItemServiceImpl(OrderItemRepository orderItemRepository) {
-        this.orderItemRepository = orderItemRepository;
-    }
-
-    @Override
-    public OrderItem saveOrderItem(OrderItem orderItem) {
-        // Business logic before saving, if needed
-        return orderItemRepository.save(orderItem);
-    }
 
     @Override
     public List<OrderItem> getAllOrderItems() {
@@ -30,6 +20,8 @@ public class OrderItemServiceImpl implements OrderItemService {
     }
 
     @Override
+    public Optional<OrderItem> getOrderItemById(Long id) {
+        return orderItemRepository.findById(id);
     public OrderItem getOrderItemById(Long id) {
         Optional<OrderItem> optionalOrderItem = orderItemRepository.findById(id);
         if (optionalOrderItem.isPresent()) {
