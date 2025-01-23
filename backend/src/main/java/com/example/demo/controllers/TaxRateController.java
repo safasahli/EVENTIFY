@@ -9,38 +9,54 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/tax-rates")
+@RequestMapping("/api/taxrates")
 @RequiredArgsConstructor
 public class TaxRateController {
+
     private final TaxRateService taxRateService;
 
+    // Récupérer tous les taux de taxe
     @GetMapping
     public ResponseEntity<List<TaxRate>> getAllTaxRates() {
-        List<TaxRate> taxRates = taxRateService.getAllTaxRates();
+        List<TaxRate> taxRates = taxRateService.findAll();
         return ResponseEntity.ok(taxRates);
     }
 
+    // Récupérer un taux de taxe par ID
     @GetMapping("/{id}")
     public ResponseEntity<TaxRate> getTaxRateById(@PathVariable Long id) {
-        TaxRate taxRate = taxRateService.getTaxRateById(id);
-        return ResponseEntity.ok(taxRate);
+        return taxRateService.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
+    // Créer un nouveau taux de taxe
     @PostMapping
     public ResponseEntity<TaxRate> createTaxRate(@RequestBody TaxRate taxRate) {
-        TaxRate createdTaxRate = taxRateService.createTaxRate(taxRate);
+        TaxRate createdTaxRate = taxRateService.save(taxRate);
         return ResponseEntity.ok(createdTaxRate);
     }
 
+    // Mettre à jour un taux de taxe existant
     @PutMapping("/{id}")
-    public ResponseEntity<TaxRate> updateTaxRate(@PathVariable Long id, @RequestBody TaxRate taxRate) {
-        TaxRate updatedTaxRate = taxRateService.updateTaxRate(id, taxRate);
-        return ResponseEntity.ok(updatedTaxRate);
+    public ResponseEntity<TaxRate> updateTaxRate(@PathVariable Long id, @RequestBody TaxRate taxRateDetails) {
+        return taxRateService.findById(id)
+                .map(existingTaxRate -> {
+                    existingTaxRate.setRate(taxRateDetails.getRate());
+                    existingTaxRate.setZone(taxRateDetails.getZone());
+                    TaxRate updatedTaxRate = taxRateService.save(existingTaxRate);
+                    return ResponseEntity.ok(updatedTaxRate);
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
 
+    // Supprimer un taux de taxe
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTaxRate(@PathVariable Long id) {
-        taxRateService.deleteTaxRate(id);
-        return ResponseEntity.noContent().build();
+        if (taxRateService.findById(id).isPresent()) {
+            taxRateService.deleteById(id);
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 }
