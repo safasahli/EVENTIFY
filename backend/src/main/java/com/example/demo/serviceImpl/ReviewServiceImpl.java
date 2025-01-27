@@ -1,4 +1,4 @@
-package main.java.com.example.demo.serviceImpl;
+package com.example.demo.serviceImpl;
 
 import com.example.demo.entities.Review;
 import com.example.demo.repositories.ReviewRepository;

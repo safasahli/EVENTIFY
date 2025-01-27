@@ -47,4 +47,3 @@ public class Order {
     @JoinColumn(name = "user_id", nullable = false)  // Assurez-vous d'avoir une relation avec l'utilisateur
     private User user;
 }
-

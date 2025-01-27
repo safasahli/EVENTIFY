@@ -31,14 +31,6 @@ public class ProductController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // Get product by SKU
-    @GetMapping("/sku/{sku}")
-    public ResponseEntity<Product> getProductBySku(@PathVariable String sku) {
-        return productService.getProductBySku(sku)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
     // Create a new product
     @PostMapping
     public Product createProduct(@RequestBody Product product) {

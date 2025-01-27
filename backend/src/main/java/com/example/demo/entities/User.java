@@ -1,11 +1,13 @@
 package com.example.demo.entities;
 
-
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.Set;
-
+@Getter
+@Setter
 @Entity
 @Table(name = "users")
 public class User {
@@ -31,6 +33,17 @@ public class User {
     @Column(name = "is_vendor")
     private boolean isVendor;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)  // One user can have multiple orders
+    private Set<Order> orders;  // Set of orders associated with the user
 
-    // Getters and setters
+    // Getters and setters for all fields including orders
+    public Set<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
+    }
+
+    // Getters and setters for other fields
 }
