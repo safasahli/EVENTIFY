@@ -1,4 +1,4 @@
-package com.example.demo.services.impl;
+package com.example.demo.serviceImpl;
 
 import com.example.demo.entities.Product;
 import com.example.demo.repositories.ProductRepository;
@@ -27,10 +27,6 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findById(id);
     }
 
-    @Override
-    public Optional<Product> getProductBySku(String sku) {
-        return productRepository.findBySku(sku);
-    }
 
     @Override
     public Product createProduct(Product product) {
@@ -45,7 +41,6 @@ public class ProductServiceImpl implements ProductService {
                     product.setDescription(updatedProduct.getDescription());
                     product.setBasePrice(updatedProduct.getBasePrice());
                     product.setStockQuantity(updatedProduct.getStockQuantity());
-                    product.setSku(updatedProduct.getSku());
                     product.setCategory(updatedProduct.getCategory());
                     product.setStore(updatedProduct.getStore());
                     product.setUpdatedAt(updatedProduct.getUpdatedAt());
