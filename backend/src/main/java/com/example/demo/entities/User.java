@@ -33,17 +33,11 @@ public class User {
     @Column(name = "is_vendor")
     private boolean isVendor;
 
+    // Getters and setters for all fields including orders
+    @Setter
+    @Getter
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)  // One user can have multiple orders
     private Set<Order> orders;  // Set of orders associated with the user
-
-    // Getters and setters for all fields including orders
-    public Set<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(Set<Order> orders) {
-        this.orders = orders;
-    }
 
     // Getters and setters for other fields
 }
