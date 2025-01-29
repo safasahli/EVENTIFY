@@ -1,6 +1,8 @@
 package com.example.demo.entities;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -8,18 +10,13 @@ import java.util.Set;
 
 @Entity
 @Table(name = "products")
+@Getter
+@Setter
 public class Product {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "store_id", nullable = false)
-    private Store store;
-
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private Category category;
 
     @Column(nullable = false)
     private String name;
@@ -33,8 +30,6 @@ public class Product {
     @Column(name = "stock_quantity")
     private Integer stockQuantity;
 
-    @Column(unique = true)
-    private String sku;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -42,6 +37,16 @@ public class Product {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @ManyToMany
+    @JoinTable(
+            name = "store_products", // Nom de la table d'association
+            joinColumns = @JoinColumn(name = "product_id"), // Colonne pour Product
+            inverseJoinColumns = @JoinColumn(name = "store_id") // Colonne pour Store
+    )
+    private Set<Store> stores; // Relation avec Store
 
-    // Getters and setters
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+
 }

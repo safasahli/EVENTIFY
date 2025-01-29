@@ -3,26 +3,18 @@ package com.example.demo.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.Set;
-
 @Entity
-@Table(name = "categories")
 @Data
-public class Category {
+public class BookableResource {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     private String name;
 
-    @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(unique = true)
-    private String slug;
-
-
-
-    // Getters and setters
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
 }

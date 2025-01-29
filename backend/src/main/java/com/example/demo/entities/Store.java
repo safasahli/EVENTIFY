@@ -3,6 +3,7 @@ package com.example.demo.entities;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
 import java.util.Set;
 
 @Entity
@@ -30,6 +31,6 @@ public class Store {
     @Column(name = "commission_rate")
     private float commissionRate;
 
-    @OneToMany(mappedBy = "store")
-    private Set<Product> products;
+    @ManyToMany(mappedBy = "stores")
+    private Set<Product> products; // Relation avec Product
 }
