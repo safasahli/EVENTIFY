@@ -14,5 +14,3 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findByStatus(String status);  // Recherche des commandes par statut
     List<Order> findByOrderDateBetween(LocalDateTime startDate, LocalDateTime endDate);  // Recherche des commandes dans une plage de dates
 }
-
-

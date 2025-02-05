@@ -31,6 +31,15 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     @Override
     public void deleteOrderItem(Long id) {
-        orderItemRepository.deleteById(id);
+    orderItemRepository.deleteById(id);
     }
+
+    /*@Override
+    public void deleteOrderItemById(Long id) {
+        if (orderItemRepository.existsById(id)) {
+            orderItemRepository.deleteById(id);
+        } else {
+            throw new RuntimeException("Order item not found with id: " + id);
+        }
+    }*/
 }

@@ -5,9 +5,8 @@ import com.example.demo.repositories.ProductRepository;
 import com.example.demo.services.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
-
-
 import java.util.List;
 import java.util.Optional;
 
@@ -53,6 +52,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void deleteProduct(Long id) {
-        productRepository.deleteById(id);
+        if (productRepository.existsById(id)) {
+            productRepository.deleteById(id);
+        } else {
+            throw new RuntimeException("Product not found with id: " + id);
+        }
     }
 }
