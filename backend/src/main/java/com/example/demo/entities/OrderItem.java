@@ -24,13 +24,11 @@ public class OrderItem {
     @Column(precision = 10, scale = 2)
     private BigDecimal price;
 
-    @Column(precision = 10, scale = 2)
-    private BigDecimal tax;
-
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
-    // The OneToMany relationship to Booking
-    @OneToMany(mappedBy = "orderItem", cascade = CascadeType.ALL)
-    private Set<Booking> bookings; // One order item can have many bookings  remove this relation
+
+    @ManyToOne
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product; // Lien avec le produit commandé
 }
