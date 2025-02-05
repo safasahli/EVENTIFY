@@ -32,5 +32,5 @@ public class OrderItem {
     private Order order;
     // The OneToMany relationship to Booking
     @OneToMany(mappedBy = "orderItem", cascade = CascadeType.ALL)
-    private Set<Booking> bookings; // One order item can have many bookings
+    private Set<Booking> bookings; // One order item can have many bookings  remove this relation
 }
