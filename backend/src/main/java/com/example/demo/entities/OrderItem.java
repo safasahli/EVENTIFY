@@ -30,7 +30,12 @@ public class OrderItem {
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
-    // The OneToMany relationship to Booking
+
+    // Assurez-vous que cette propriété est nommée 'product'
+    @ManyToOne
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;  // Référence à l'entité Product
+
     @OneToMany(mappedBy = "orderItem", cascade = CascadeType.ALL)
-    private Set<Booking> bookings; // One order item can have many bookings  remove this relation
+    private Set<Booking> bookings; // Un order item peut avoir plusieurs bookings
 }

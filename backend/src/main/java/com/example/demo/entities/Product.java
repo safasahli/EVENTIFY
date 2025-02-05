@@ -19,12 +19,12 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 public class Product {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-
     private String name;
 
     @Column(columnDefinition = "TEXT")
@@ -35,7 +35,6 @@ public class Product {
 
     @Column(name = "stock_quantity")
     private Integer stockQuantity;
-
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -54,6 +53,8 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
+
+    // La collection des orderItems
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private Set<OrderItem> orderItems; // Un produit peut être associé à plusieurs OrderItems
 }
-
-
