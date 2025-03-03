@@ -1,5 +1,6 @@
 package com.example.demo.entities;
 
+import com.example.demo.security.user.User;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
