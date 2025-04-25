@@ -16,16 +16,17 @@ public class JwtUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
+    @Value("${app.jwtSecret}")
+    private String jwtSecret;
+
     @Value("${app.jwtExpirationMs}")
     private long jwtExpirationMs;
 
     private SecretKey jwtSecretKey;
 
-    // Initialize a secure random key for HS512
     @PostConstruct
     public void init() {
-        // You can optionally load a Base64-encoded key from application.properties too
-        this.jwtSecretKey = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+        this.jwtSecretKey = Keys.hmacShaKeyFor(jwtSecret.getBytes());
     }
 
     public String generateJwtToken(String username) {

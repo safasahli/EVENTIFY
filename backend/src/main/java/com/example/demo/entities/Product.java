@@ -1,15 +1,23 @@
 package com.example.demo.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Set;
+
 
 @Entity
 @Table(name = "products")
@@ -23,33 +31,40 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-
-    private String name;
 
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "base_price", precision = 10, scale = 2)
-    private BigDecimal basePrice;
 
     @Column(name = "stock_quantity")
     private Integer stockQuantity;
 
 
-    @Column(name = "created_at")
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
+    @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @ManyToMany
-    @JoinTable(
-            name = "store_products", // Nom de la table d'association
-            joinColumns = @JoinColumn(name = "product_id"), // Colonne pour Product
-            inverseJoinColumns = @JoinColumn(name = "store_id") // Colonne pour Store
-    )
-    private Set<Store> stores; // Relation avec Store
+    @Column(nullable = false)
+    @NotBlank(message = "Product name is required")
+    @Size(max = 100, message = "Name must be less than 100 characters")
+    private String name;
+
+    @Digits(integer = 8, fraction = 2, message = "Invalid price format")
+    @PositiveOrZero(message = "Price must be positive")
+    @Column(name = "base_price", precision = 10, scale = 2)
+    private BigDecimal basePrice;
+
+    private String imageName;
+    private String imageType;
+    @Lob
+    @Column(name = "image_data", columnDefinition = "BYTEA")
+    @JdbcTypeCode(SqlTypes.BINARY)
+    private byte[] imageData;
+
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)

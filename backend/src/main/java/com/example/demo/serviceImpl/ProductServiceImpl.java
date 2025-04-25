@@ -5,7 +5,10 @@ import com.example.demo.repositories.ProductRepository;
 import com.example.demo.services.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -27,11 +30,16 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product createProduct(Product product) {
-        product.setCreatedAt(LocalDateTime.now());
-        product.setUpdatedAt(LocalDateTime.now());
+    public Product createProduct(Product product, MultipartFile imageFile) throws IOException {
+
+
+        product.setImageName(imageFile.getOriginalFilename());
+        product.setImageType(imageFile.getContentType());
+        product.setImageData(imageFile.getBytes());
+
         return productRepository.save(product);
     }
+
 
     @Override
     public Product updateProduct(Long id, Product productDetails) {
@@ -58,4 +66,5 @@ public class ProductServiceImpl implements ProductService {
             throw new RuntimeException("Product not found with id: " + id);
         }
     }
+
 }

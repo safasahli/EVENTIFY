@@ -31,6 +31,5 @@ public class Store {
     @Column(name = "commission_rate")
     private float commissionRate;
 
-    @ManyToMany(mappedBy = "stores")
-    private Set<Product> products; // Relation avec Product
+
 }
