@@ -9,6 +9,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +35,16 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product createProduct(Product product, MultipartFile imageFile) throws IOException {
+        // Extract the original file name and content type
+        String imageName = imageFile.getOriginalFilename();
+        String imageType = imageFile.getContentType();
+
+        // Directly set the path where the file will be saved
+        String uploadDir = "D:/PFA2/Eventify-images/"; // Your path to the folder
+        Path destinationPath = Paths.get(uploadDir, imageName);
+
+        // Save the file to the disk (overwrite if the file exists)
+        Files.copy(imageFile.getInputStream(), destinationPath, StandardCopyOption.REPLACE_EXISTING);
 
 
         product.setImageName(imageFile.getOriginalFilename());
