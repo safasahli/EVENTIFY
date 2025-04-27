@@ -34,7 +34,7 @@ public class OrderServiceImpl implements OrderService {
     public Order updateOrder(Long id, Order order) {
         Order existingOrder = getOrderById(id);
         existingOrder.setTotalAmount(order.getTotalAmount());
-        existingOrder.setStatus(order.getStatus());
+    //    existingOrder.setStatus(order.getStatus());
         // Ajouter les champs nécessaires ici
         return orderRepository.save(existingOrder);
     }

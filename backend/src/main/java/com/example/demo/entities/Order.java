@@ -19,14 +19,13 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String description;
+    @Column(name = "address")
+    private String address;
+
     @Column(name = "order_date", nullable = false)
     private LocalDateTime orderDate;
 
-    @Column(nullable = false)
-    private String status;
-
-    @Column(precision = 10, scale = 2)
-    private BigDecimal subtotal;
 
     @Column(name = "tax_total", precision = 10, scale = 2)
     private BigDecimal taxTotal;
@@ -42,6 +41,8 @@ public class Order {
 
     @Column(name = "shipping_method")
     private String shippingMethod;
+
+
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)  // Assurez-vous d'avoir une relation avec l'utilisateur

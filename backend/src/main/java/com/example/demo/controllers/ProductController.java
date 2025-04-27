@@ -3,13 +3,16 @@ package com.example.demo.controllers;
 import com.example.demo.entities.Product;
 import com.example.demo.services.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
+import org.springframework.http.MediaType;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -74,4 +77,52 @@ public class ProductController {
     public String healthCheck() {
         return "Product controller is running";
     }
+
+
+    @GetMapping("/products")
+    public List<Product> getProducts() {
+        return productService.getAllProducts();
+    }
+
+    @GetMapping("/products/{productName}")
+    public ResponseEntity<Product> getProductByName(@PathVariable String productName) {
+        try {
+            // Fetch the product by its name
+            Product product = productService.getProductByName(productName);
+
+            if (product == null) {
+                return ResponseEntity.notFound().build(); // If the product doesn't exist
+            }
+
+            return ResponseEntity.ok(product); // Return the product details
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(null); // Handle error appropriately
+        }
+    }
+    @GetMapping("/products/{productName}/image")
+    public ResponseEntity<Map<String, Object>> getProductImage(@PathVariable String productName) {
+        Product product = productService.getProductByName(productName);
+        if (product != null && product.getImageData() != null) {
+            // Prepare response with both image data and image name
+            Map<String, Object> response = new HashMap<>();
+            response.put("imageData", product.getImageData());
+            response.put("imageName", product.getImageName()); // Assuming the image name is stored in the product entity
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_JSON) // Use application/json for returning both image data and image name
+                    .body(response);
+        } else {
+            return ResponseEntity.notFound().build(); // If no product or image found
+        }
+    }
+
+
 }
+
+
+
+
+
+
+

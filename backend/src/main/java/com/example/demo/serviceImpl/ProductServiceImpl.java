@@ -4,9 +4,9 @@ import com.example.demo.entities.Product;
 import com.example.demo.repositories.ProductRepository;
 import com.example.demo.services.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -16,6 +16,7 @@ import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,10 +24,6 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
 
-    @Override
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
-    }
 
     @Override
     public Optional<Product> getProductById(Long id) {
@@ -80,5 +77,24 @@ public class ProductServiceImpl implements ProductService {
             throw new RuntimeException("Product not found with id: " + id);
         }
     }
+
+
+
+    public byte[] getImageByName(String imageName) throws IOException {
+        String uploadDir = "D:/PFA2/Eventify-images"; // your folder path
+        Path imagePath = Paths.get(uploadDir, imageName);
+        return Files.readAllBytes(imagePath);
+    }
+    @Override
+    public List<Product> getAllProducts() {
+        return productRepository.findAll();
+    }
+
+    @Override
+    public Product getProductByName(String productName) {
+        // Fetch the product using the repository
+        return productRepository.findByName(productName);
+    }
+
 
 }

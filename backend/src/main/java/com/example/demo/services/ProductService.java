@@ -13,7 +13,9 @@ public interface ProductService {
     Product createProduct(Product product, MultipartFile imageFile) throws IOException;
     Product updateProduct(Long id, Product productDetails);
     void deleteProduct(Long id);
+    byte[] getImageByName(String imageName) throws IOException;
 
 
 
+    Product getProductByName(String productName);
 }
