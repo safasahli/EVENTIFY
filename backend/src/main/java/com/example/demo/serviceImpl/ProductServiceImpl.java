@@ -1,28 +1,34 @@
 package com.example.demo.serviceImpl;
 
+import com.example.demo.entities.Media;
 import com.example.demo.entities.Product;
 import com.example.demo.repositories.ProductRepository;
+import com.example.demo.services.MediaService;
 import com.example.demo.services.ProductService;
-import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.codec.binary.Base64;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
+    private final ObjectMapper objectMapper;
+    private final MediaService mediaService;
+
+    ProductServiceImpl(ProductRepository productRepository, ObjectMapper objectMapper, MediaService mediaService) {
+        this.productRepository = productRepository;
+        this.objectMapper = objectMapper;
+        this.mediaService = mediaService;
+    }
 
 
     @Override
@@ -31,24 +37,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product createProduct(Product product, MultipartFile imageFile) throws IOException {
-        // Extract the original file name and content type
-        String imageName = imageFile.getOriginalFilename();
-        String imageType = imageFile.getContentType();
-
-        // Directly set the path where the file will be saved
-        String uploadDir = "D:/PFA2/Eventify-images/"; // Your path to the folder
-        Path destinationPath = Paths.get(uploadDir, imageName);
-
-        // Save the file to the disk (overwrite if the file exists)
-        Files.copy(imageFile.getInputStream(), destinationPath, StandardCopyOption.REPLACE_EXISTING);
-
-
-        product.setImageName(imageFile.getOriginalFilename());
-        product.setImageType(imageFile.getContentType());
-        product.setImageData(imageFile.getBytes());
-
-        return productRepository.save(product);
+    public Product createProduct(String product, MultipartFile[] images) throws JsonProcessingException {
+        Product productToSave = this.objectMapper.readValue(product, Product.class);
+        List<Media> productImages = mediaService.upload(images);
+        productToSave.setProductImages(productImages);
+        return productRepository.save(productToSave);
     }
 
 

@@ -17,6 +17,8 @@ import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
 
 
 @Entity
@@ -58,17 +60,12 @@ public class Product {
     @Column(name = "base_price", precision = 10, scale = 2)
     private BigDecimal basePrice;
 
-    private String imageName;
-    private String imageType;
-    @Lob
-    @Column(name = "image_data", columnDefinition = "BYTEA")
-    @JdbcTypeCode(SqlTypes.BINARY)
-    private byte[] imageData;
-
-
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
+
+    @OneToMany
+    private List<Media> productImages;
 }
 
 

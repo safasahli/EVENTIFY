@@ -37,15 +37,10 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<?> createProduct(
-            @RequestPart Product product,
-            @RequestPart MultipartFile imageFile) {
-        // DEBUG: Print received data
-        System.out.println("Received product: " + product);
-        System.out.println("File info: " + imageFile.getOriginalFilename() + " (" + imageFile.getSize() + " bytes)");
+            @RequestPart("product") String product,
+            @RequestPart("images") MultipartFile[] imageFiles) {
         try {
-            System.out.println(product);
-            Product product1 = productService.createProduct(product, imageFile);
-            return new ResponseEntity<>(product1, HttpStatus.CREATED);
+            return ResponseEntity.ok(productService.createProduct(product, imageFiles));
         } catch (IOException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -98,22 +93,6 @@ public class ProductController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(null); // Handle error appropriately
-        }
-    }
-    @GetMapping("/products/{productName}/image")
-    public ResponseEntity<Map<String, Object>> getProductImage(@PathVariable String productName) {
-        Product product = productService.getProductByName(productName);
-        if (product != null && product.getImageData() != null) {
-            // Prepare response with both image data and image name
-            Map<String, Object> response = new HashMap<>();
-            response.put("imageData", product.getImageData());
-            response.put("imageName", product.getImageName()); // Assuming the image name is stored in the product entity
-
-            return ResponseEntity.ok()
-                    .contentType(MediaType.APPLICATION_JSON) // Use application/json for returning both image data and image name
-                    .body(response);
-        } else {
-            return ResponseEntity.notFound().build(); // If no product or image found
         }
     }
 
