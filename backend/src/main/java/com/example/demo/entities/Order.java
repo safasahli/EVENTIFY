@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -26,6 +27,19 @@ public class Order {
     @Column(name = "order_date", nullable = false)
     private LocalDateTime orderDate;
 
+    @Column(nullable = false)
+    private String status;
+
+   /* @Column(precision = 10, scale = 2)
+    private BigDecimal subtotal;*/    //remove it ,totalPrice is a dynamic operation should not save it
+
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItem> orderItems;
+
+    //@OneToMany(mappedBy = "order") → Relation Un à Plusieurs avec OrderItem.
+    /*cascade = CascadeType.ALL → Si on supprime un Order, tous ses OrderItem seront supprimés.
+            orphanRemoval = true → Supprime les OrderItem non associés à une commande.*/
 
     @Column(name = "tax_total", precision = 10, scale = 2)
     private BigDecimal taxTotal;
@@ -41,8 +55,6 @@ public class Order {
 
     @Column(name = "shipping_method")
     private String shippingMethod;
-
-
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)  // Assurez-vous d'avoir une relation avec l'utilisateur

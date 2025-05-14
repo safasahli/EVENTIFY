@@ -48,7 +48,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/**").permitAll()// Public endpoints for login/signup
-                        .anyRequest().authenticated() // Any other request requires authentication
+                        .requestMatchers("/api/**").permitAll()  // Any other request requires authentication
                 );
 
         // Add JWT token filter before the UsernamePasswordAuthenticationFilter
