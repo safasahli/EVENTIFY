@@ -19,6 +19,8 @@ public class ServicesEntity{
     private Long id;
     private String name;
     private String description;
+    private String serviceAddress;
+    private String contactService;
     @Digits(integer = 8, fraction = 2, message = "Invalid price format")
     @PositiveOrZero(message = "Price must be positive")
     @Column(name = "base_price", precision = 10, scale = 2)

@@ -20,20 +20,21 @@ public class Booking {
     @Column(nullable = false)
     private String customerName;
 
-    @Column(nullable = false)
-    private String event;
 
-    @Column(nullable = false)
+
     private LocalDateTime bookingDate;
 
     @Column(nullable = false)
-    private int numberOfGuests;
+    private int userContact;
 
     @Column(nullable = false)
     private String status; // Example: "Pending", "Confirmed", "Cancelled"
 
-    // The ManyToOne relationship to OrderItem
     @ManyToOne
-    @JoinColumn(name = "order_item_id", nullable = false)
-    private OrderItem orderItem; // Each booking is associated with one order item
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "service_id")
+    private ServicesEntity service; // Each booking is associated with one order item
 }
